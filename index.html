@@ -4,19 +4,55 @@
   <meta charset="UTF-8" />
   <title>John's Coding Project</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Hi, I'm John 👋</h1>
-  <p>This is a cool coding project I'm working on. Feel free to try the calculator below!</p>
+  <header>
+    <h1>Hi, I'm John 👋</h1>
+    <p class="tagline">Creative coder, stealth launcher architect, and toolmaker extraordinaire.</p>
+  </header>
 
-  <div class="calculator">
+  <section class="tool-card">
+    <h2>🧮 Calculator</h2>
     <input type="text" id="expression" placeholder="e.g. 2 + 2" />
-    <br />
     <button onclick="calculate()">Calculate</button>
     <div id="result"></div>
-  </div>
+  </section>
+
+  <section class="tool-card">
+    <h2>📅 Current Time</h2>
+    <div id="clock"></div>
+  </section>
+
+  <section class="tool-card">
+    <h2>📓 Note Pad</h2>
+    <textarea id="notes" placeholder="Type your notes here..."></textarea>
+    <button onclick="saveNotes()">Save Notes</button>
+  </section>
+
+  <section class="tool-card">
+    <h2>🎲 Random Number Generator</h2>
+    <input type="number" id="min" placeholder="Min" />
+    <input type="number" id="max" placeholder="Max" />
+    <button onclick="generateRandom()">Generate</button>
+    <div id="randomResult"></div>
+  </section>
+
+  <section class="tool-card">
+    <h2>🔁 Unit Converter</h2>
+    <input type="number" id="unitInput" placeholder="Enter value" />
+    <select id="unitType">
+      <option value="cmToIn">cm → inches</option>
+      <option value="inToCm">inches → cm</option>
+      <option value="kgToLb">kg → pounds</option>
+      <option value="lbToKg">pounds → kg</option>
+    </select>
+    <button onclick="convertUnit()">Convert</button>
+    <div id="unitResult"></div>
+  </section>
 
   <button id="launchProxy">Launch Interstellar</button>
+  <button id="launchDirectory">Launch Site Directory</button>
 
   <script>
     function calculate() {
@@ -29,6 +65,49 @@
       }
     }
 
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").innerText = now.toLocaleString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function saveNotes() {
+      const notes = document.getElementById("notes").value;
+      localStorage.setItem("userNotes", notes);
+      alert("Notes saved!");
+    }
+
+    function generateRandom() {
+      const min = parseInt(document.getElementById("min").value);
+      const max = parseInt(document.getElementById("max").value);
+      if (isNaN(min) || isNaN(max) || min > max) {
+        document.getElementById("randomResult").innerText = "Invalid range.";
+        return;
+      }
+      const rand = Math.floor(Math.random() * (max - min + 1)) + min;
+      document.getElementById("randomResult").innerText = "Random number: " + rand;
+    }
+
+    function convertUnit() {
+      const value = parseFloat(document.getElementById("unitInput").value);
+      const type = document.getElementById("unitType").value;
+      let result = "";
+
+      if (isNaN(value)) {
+        result = "Please enter a valid number.";
+      } else {
+        switch (type) {
+          case "cmToIn": result = (value / 2.54).toFixed(2) + " in"; break;
+          case "inToCm": result = (value * 2.54).toFixed(2) + " cm"; break;
+          case "kgToLb": result = (value * 2.20462).toFixed(2) + " lb"; break;
+          case "lbToKg": result = (value / 2.20462).toFixed(2) + " kg"; break;
+        }
+      }
+
+      document.getElementById("unitResult").innerText = result;
+    }
+
     document.addEventListener("keydown", function (e) {
       if (e.shiftKey && e.key.toLowerCase() === "b") {
         const code = prompt("Enter access code:");
@@ -38,22 +117,26 @@
           alert("Incorrect code.");
         }
       }
+
+      if (e.shiftKey && e.key.toLowerCase() === "d") {
+        const code = prompt("Enter access code:");
+        if (code === "1020284") {
+          document.getElementById("launchDirectory").click();
+        } else {
+          alert("Incorrect code.");
+        }
+      }
     });
 
     document.getElementById("launchProxy").addEventListener("click", function () {
       const newTab = window.open("about:blank", "_blank");
-      if (!newTab) {
-        alert("Pop-up blocked. Please allow pop-ups for this site.");
-        return;
-      }
-
       const content = `
         <!DOCTYPE html>
         <html>
         <head>
           <title>Interstellar</title>
           <style>
-            body { margin: 0; overflow: hidden; }
+            body { margin: 0; overflow: hidden; background: black; }
             iframe { width: 100vw; height: 100vh; border: none; }
             #fullscreenBtn {
               position: fixed;
@@ -61,7 +144,7 @@
               right: 10px;
               z-index: 9999;
               padding: 10px 15px;
-              background: #0077cc;
+              background: #00c6ff;
               color: white;
               border: none;
               font-size: 16px;
@@ -87,7 +170,65 @@
         </body>
         </html>
       `;
+      newTab.document.open();
+      newTab.document.write(content);
+      newTab.document.close();
+    });
 
+    document.getElementById("launchDirectory").addEventListener("click", function () {
+      const newTab = window.open("about:blank", "_blank");
+      const content = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Secret Site Directory</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 40px;
+              font-family: 'Poppins', sans-serif;
+              background: linear-gradient(to right, #1e3c72, #2a5298);
+              color: white;
+              text-align: center;
+            }
+            h1 {
+              font-size: 2.5em;
+              margin-bottom: 20px;
+              background: linear-gradient(to right, #00c6ff, #0072ff);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            }
+            ul {
+              list-style: none;
+              padding: 0;
+              font-size: 1.2em;
+            }
+            li {
+              margin: 15px 0;
+              padding: 10px 20px;
+              background: rgba(255,255,255,0.1);
+              border-radius: 12px;
+              backdrop-filter: blur(8px);
+              box-shadow: 0 0 10px rgba(0,198,255,0.3);
+            }
+            .coming-soon {
+              margin-top: 30px;
+              font-size: 1.1em;
+              color: #aaffaa;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>🔐 Secret Site Directory</h1>
+          <ul>
+            <li>mathplayzone.com</li>
+            <li>108192.xyz.cdn.cloudflare.net</li>
+            <li>saratogaschools.net/Schooltool/home</li>
+          </ul>
+          <div class="coming-soon">More coming soon!</div>
+        </body>
+        </html>
+      `;
       newTab.document.open();
       newTab.document.write(content);
       newTab.document.close();
