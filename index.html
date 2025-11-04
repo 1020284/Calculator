@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Hi, I'm John 👋</h1>
-    <p class="tagline">Creative coder, stealth launcher architect, and toolmaker extraordinaire.</p>
+    <p class="tagline">I build practical tools, clean interfaces, and smart shortcuts that make everyday tasks easier.</p>
   </header>
 
   <section class="tool-card">
@@ -50,9 +50,6 @@
     <button onclick="convertUnit()">Convert</button>
     <div id="unitResult"></div>
   </section>
-
-  <button id="launchProxy">Launch Interstellar</button>
-  <button id="launchDirectory">Launch Site Directory</button>
 
   <script>
     function calculate() {
@@ -112,7 +109,50 @@
       if (e.shiftKey && e.key.toLowerCase() === "b") {
         const code = prompt("Enter access code:");
         if (code === "1020284") {
-          document.getElementById("launchProxy").click();
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>Interstellar</title>
+              <style>
+                body { margin: 0; overflow: hidden; background: black; }
+                iframe { width: 100vw; height: 100vh; border: none; }
+                #fullscreenBtn {
+                  position: fixed;
+                  top: 10px;
+                  right: 10px;
+                  z-index: 9999;
+                  padding: 10px 15px;
+                  background: #00c6ff;
+                  color: white;
+                  border: none;
+                  font-size: 16px;
+                  cursor: pointer;
+                }
+              </style>
+            </head>
+            <body>
+              <button id="fullscreenBtn">Fullscreen</button>
+              <iframe id="proxyFrame" src="https://interstellar.koyeb.app/"></iframe>
+              <script>
+                document.getElementById("fullscreenBtn").onclick = function() {
+                  const iframe = document.getElementById("proxyFrame");
+                  if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                  } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                  } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                  }
+                };
+              <\/script>
+            </body>
+            </html>
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
         } else {
           alert("Incorrect code.");
         }
@@ -121,117 +161,72 @@
       if (e.shiftKey && e.key.toLowerCase() === "d") {
         const code = prompt("Enter access code:");
         if (code === "1020284") {
-          document.getElementById("launchDirectory").click();
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>School Resource Portal</title>
+              <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f9f9f9;
+                  color: #333;
+                  padding: 40px;
+                  text-align: center;
+                }
+                h1 {
+                  font-size: 2.2em;
+                  margin-bottom: 20px;
+                  color: #004080;
+                }
+                ul {
+                  list-style: none;
+                  padding: 0;
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+                li {
+                  margin: 15px 0;
+                  padding: 12px 20px;
+                  background-color: #ffffff;
+                  border: 1px solid #ccc;
+                  border-radius: 8px;
+                  text-align: left;
+                  font-size: 1.1em;
+                }
+                a {
+                  color: #004080;
+                  text-decoration: none;
+                }
+                a:hover {
+                  text-decoration: underline;
+                }
+                .footer {
+                  margin-top: 40px;
+                  font-size: 1em;
+                  color: #666;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>School Resource Portal</h1>
+              <ul>
+                <li><a href="https://mathplayzone.com" target="_blank">MathPlayZone</a></li>
+                <li><a href="https://108192.xyz.cdn.cloudflare.net" target="_blank">Student Access Gateway</a></li>
+                <li><a href="https://saratogaschools.net/Schooltool/home" target="_blank">SchoolTool Login</a></li>
+              </ul>
+              <div class="footer">More coming soon!</div>
+            </body>
+            </html>
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
         } else {
           alert("Incorrect code.");
         }
       }
-    });
-
-    document.getElementById("launchProxy").addEventListener("click", function () {
-      const newTab = window.open("about:blank", "_blank");
-      const content = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Interstellar</title>
-          <style>
-            body { margin: 0; overflow: hidden; background: black; }
-            iframe { width: 100vw; height: 100vh; border: none; }
-            #fullscreenBtn {
-              position: fixed;
-              top: 10px;
-              right: 10px;
-              z-index: 9999;
-              padding: 10px 15px;
-              background: #00c6ff;
-              color: white;
-              border: none;
-              font-size: 16px;
-              cursor: pointer;
-            }
-          </style>
-        </head>
-        <body>
-          <button id="fullscreenBtn">Fullscreen</button>
-          <iframe id="proxyFrame" src="https://interstellar.koyeb.app/"></iframe>
-          <script>
-            document.getElementById("fullscreenBtn").onclick = function() {
-              const iframe = document.getElementById("proxyFrame");
-              if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-              } else if (iframe.webkitRequestFullscreen) {
-                iframe.webkitRequestFullscreen();
-              } else if (iframe.msRequestFullscreen) {
-                iframe.msRequestFullscreen();
-              }
-            };
-          <\/script>
-        </body>
-        </html>
-      `;
-      newTab.document.open();
-      newTab.document.write(content);
-      newTab.document.close();
-    });
-
-    document.getElementById("launchDirectory").addEventListener("click", function () {
-      const newTab = window.open("about:blank", "_blank");
-      const content = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Secret Site Directory</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 40px;
-              font-family: 'Poppins', sans-serif;
-              background: linear-gradient(to right, #1e3c72, #2a5298);
-              color: white;
-              text-align: center;
-            }
-            h1 {
-              font-size: 2.5em;
-              margin-bottom: 20px;
-              background: linear-gradient(to right, #00c6ff, #0072ff);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-            }
-            ul {
-              list-style: none;
-              padding: 0;
-              font-size: 1.2em;
-            }
-            li {
-              margin: 15px 0;
-              padding: 10px 20px;
-              background: rgba(255,255,255,0.1);
-              border-radius: 12px;
-              backdrop-filter: blur(8px);
-              box-shadow: 0 0 10px rgba(0,198,255,0.3);
-            }
-            .coming-soon {
-              margin-top: 30px;
-              font-size: 1.1em;
-              color: #aaffaa;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>🔐 Secret Site Directory</h1>
-          <ul>
-            <li>mathplayzone.com</li>
-            <li>108192.xyz.cdn.cloudflare.net</li>
-            <li>saratogaschools.net/Schooltool/home</li>
-          </ul>
-          <div class="coming-soon">More coming soon!</div>
-        </body>
-        </html>
-      `;
-      newTab.document.open();
-      newTab.document.write(content);
-      newTab.document.close();
     });
   </script>
 </body>
