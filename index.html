@@ -238,5 +238,16 @@
     <p>Cloudflare, for deploying this site.</p>
     <p style="margin-top: 20px;"><em>by John McCombs</em></p>
   </footer>
+<script>
+  const emojis = ['🎉', '✨', '💡', '🚀', '🎈'];
+  for (let i = 0; i < 20; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.animationDuration = (Math.random() * 3 + 3) + 's';
+    confetti.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    document.body.appendChild(confetti);
+  }
+</script>
 </body>
 </html>
