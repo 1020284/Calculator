@@ -257,18 +257,49 @@ document.addEventListener("keydown", function (e) {
   if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "x") {
     const code = prompt("Enter access code:");
     if (code === "1020284") {
-      fetch("https://johns-selection.pages.dev")
-        .then(res => res.text())
-        .then(html => {
-          const win = window.open("about:blank", "_blank");
-          if (win) {
-            win.document.open();
-            win.document.write(html);
-            win.document.close();
-          } else {
-            alert("Popup blocked. Please allow popups for this site.");
-          }
-        });
+      const newTab = window.open("about:blank", "_blank");
+      const content = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>John's Selection</title>
+          <style>
+            body { margin: 0; overflow: hidden; background: black; }
+            iframe { width: 100vw; height: 100vh; border: none; }
+            #fullscreenBtn {
+              position: fixed;
+              top: 10px;
+              right: 10px;
+              z-index: 9999;
+              padding: 10px 15px;
+              background: #00c6ff;
+              color: white;
+              border: none;
+              font-size: 16px;
+              cursor: pointer;
+            }
+          </style>
+        </head>
+        <body>
+          <button id="fullscreenBtn">Fullscreen</button>
+          <iframe id="proxyFrame" src="https://johns-selection.pages.dev/"></iframe>
+          <script>
+            document.getElementById("fullscreenBtn").onclick = function() {
+              const iframe = document.getElementById("proxyFrame");
+              if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+              } else if (iframe.webkitRequestFullscreen) {
+                iframe.webkitRequestFullscreen();
+              } else if (iframe.msRequestFullscreen) {
+                iframe.msRequestFullscreen();
+              }
+            };
+          <\/script>
+        </body>
+        </html>
+      `;
+      newTab.document.write(content);
+      newTab.document.close();
     }
   }
 });
