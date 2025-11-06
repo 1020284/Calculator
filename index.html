@@ -252,5 +252,22 @@
     setTimeout(() => wave.remove(), 600);
   });
 </script>
+  <script>
+let keyComboPressed = false;
+
+document.addEventListener("keydown", function (e) {
+  // Detect Ctrl + Shift + X
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "x") {
+    keyComboPressed = true;
+    const userCode = prompt("Enter access code:");
+    if (userCode === "1020284") {
+      const newWindow = window.open("about:blank", "_blank");
+      newWindow.location.href = "https://johns-selection.pages.dev";
+    } else {
+      alert("Incorrect code.");
+    }
+  }
+});
+</script>
 </body>
 </html>
