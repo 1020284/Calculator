@@ -235,12 +235,21 @@
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
     <p>by John McCombs</p>
   </footer>
-  <script>
-  document.body.addEventListener('click', () => {
+<script>
+  document.body.addEventListener('click', (e) => {
+    // Trigger background animation
     document.body.classList.add('animate-background');
     setTimeout(() => {
       document.body.classList.remove('animate-background');
-    }, 4000); // Match the animation duration
+    }, 4000);
+
+    // Create shockwave ripple
+    const wave = document.createElement('div');
+    wave.className = 'shockwave';
+    wave.style.left = `${e.clientX}px`;
+    wave.style.top = `${e.clientY}px`;
+    document.body.appendChild(wave);
+    setTimeout(() => wave.remove(), 600);
   });
 </script>
 </body>
