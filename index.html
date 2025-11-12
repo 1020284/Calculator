@@ -231,7 +231,7 @@
     });
   </script>
    
-  <footer style="margin-top: 40px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 0.9em; color: #555;">
+  <footer style="margin-top: 40px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 0.9em; color: #ffffff;">
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
     <p>by John McCombs</p>
   </footer>
@@ -267,7 +267,7 @@
           </style>
         </head>
         <body>
-          <iframe src="https://private-selection.pages.dev"></iframe>
+          <iframe src="https://wasmer-1020284.wasmer.app"></iframe>
         </body>
         </html>
       `;
@@ -350,6 +350,32 @@
         newTab.document.close();
       } else {
         alert("Incorrect code.");
+      }
+    }
+  });
+</script>
+  <section class="tool-card">
+  <h2>🕵️ Secret Code</h2>
+  <input type="text" id="secretInput" placeholder="Type your secret code..." />
+  <div id="secretOutput" style="margin-top: 10px;"></div>
+</section>
+
+<script>
+  document.getElementById("secretInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const input = this.value.trim().toLowerCase();
+      if (input === "john is awesome") {
+        document.getElementById("secretOutput").innerHTML = `
+          <ul style="list-style: none; padding-left: 0;">
+            <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
+            <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
+            <li><strong>Shift + R</strong>: Opens <em>wasmer-1020284.wasmer.app</em> in a blank tab</li>
+            <li><strong>Shift + X</strong>: Opens <em>nettleweb.github.io</em> in a blank tab</li>
+            <li><strong>Shift + C</strong>: Opens <em>canlite.org</em> in a blank tab</li>
+          </ul>
+        `;
+      } else {
+        document.getElementById("secretOutput").innerText = "Incorrect code.";
       }
     }
   });
