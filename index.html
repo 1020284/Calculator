@@ -324,5 +324,35 @@
     }
   });
 </script>
+  <script>
+  document.addEventListener("keydown", function (e) {
+    if (e.shiftKey && e.key.toLowerCase() === "c") {
+      const code = prompt("Enter access code:");
+      if (code === "1020284") {
+        const newTab = window.open("about:blank", "_blank");
+        const content = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Canlite</title>
+            <style>
+              body { margin: 0; overflow: hidden; background: black; }
+              iframe { width: 100vw; height: 100vh; border: none; }
+            </style>
+          </head>
+          <body>
+            <iframe src="https://canlite.org"></iframe>
+          </body>
+          </html>
+        `;
+        newTab.document.open();
+        newTab.document.write(content);
+        newTab.document.close();
+      } else {
+        alert("Incorrect code.");
+      }
+    }
+  });
+</script>
 </body>
 </html>
