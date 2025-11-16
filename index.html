@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,22 +7,6 @@
   <title>Learning Hub</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-  <script>
-    window.onload = function() {
-      // Open a new about:blank tab
-      var newTab = window.open("about:blank", "_blank");
-
-      // Embed calculator4.pages.dev inside the new tab
-      if (newTab) {
-        newTab.document.write('<iframe src="https://calculator4.pages.dev" style="border:none;width:100%;height:100%;"></iframe>');
-        newTab.document.title = "Calculator Hub";
-      }
-
-      // Redirect the current tab to Google
-      window.location.href = "https://www.google.com";
-    };
-  </script>
 </head>
 <body>
   <header>
@@ -53,7 +39,20 @@
     <button onclick="generateRandom()">Generate</button>
     <div id="randomResult"></div>
   </section>
-  
+
+  <section class="tool-card">
+    <h2>🔁 Unit Converter</h2>
+    <input type="number" id="unitInput" placeholder="Enter value" />
+    <select id="unitType">
+      <option value="cmToIn">cm → inches</option>
+      <option value="inToCm">inches → cm</option>
+      <option value="kgToLb">kg → pounds</option>
+      <option value="lbToKg">pounds → kg</option>
+    </select>
+    <button onclick="convertUnit()">Convert</button>
+    <div id="unitResult"></div>
+  </section>
+
   <script>
     function calculate() {
       const expr = document.getElementById("expression").value;
@@ -400,9 +399,6 @@ if (e.shiftKey && e.key.toLowerCase() === "d") {
           <ul style="list-style: none; padding-left: 0;">
             <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
             <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
-            <li><strong>Shift + R</strong>: Opens <em>wasmer-1020284.wasmer.app</em> in a blank tab</li>
-            <li><strong>Shift + X</strong>: Opens <em>nettleweb.github.io</em> in a blank tab</li>
-            <li><strong>Shift + C</strong>: Opens <em>canlite.org</em> in a blank tab</li>
           </ul>
         `;
       } else {
