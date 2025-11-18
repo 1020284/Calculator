@@ -1,65 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Learning Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learning Hub - All Tools</title>
   <style>
-    /* ===== Global Reset ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
-
-    /* ===== Root Variables ===== */
+    /* Root & Global */
     :root {
       --bg-color: #0b1220;
       --surface: #0f172a;
       --primary: #38bdf8;
       --secondary: #ef4444;
       --accent: #a3e635;
-      --success: #22c55e;
-      --warning: #f59e0b;
       --text: #e6edf7;
       --muted: #94a3b8;
-
-      --radius-xs: 8px;
       --radius: 16px;
-      --radius-lg: 24px;
-
-      --shadow-sm: 0 4px 12px rgba(0,0,0,0.35);
-      --shadow: 0 8px 24px rgba(0,0,0,0.45);
       --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
-
-      --glass: rgba(16,23,42,0.35);
-      --glass-strong: rgba(16,23,42,0.55);
-
       --gradient: linear-gradient(135deg, var(--primary), var(--accent));
       --gradient-alt: radial-gradient(1000px 500px at 80% 20%, rgba(56,189,248,0.18), transparent 60%);
-
-      --transition-fast: 150ms ease;
       --transition: 300ms ease;
-      --transition-slow: 600ms ease;
     }
-
-    /* ===== Base ===== */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
     body {
       font-family: 'Poppins', Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       background: var(--bg-color);
       color: var(--text);
       line-height: 1.6;
-      overflow-x: hidden;
-      transition: background var(--transition), color var(--transition);
-      background-image: var(--gradient-alt);
       min-height: 100vh;
       padding: 2rem 1rem;
+      background-image: var(--gradient-alt);
       display: grid;
       grid-template-columns: 1fr min(900px, 90%) 1fr;
       grid-template-rows: auto 1fr auto;
       gap: 2rem;
-      position: relative;
-      z-index: 1;
     }
-
-    /* Wrapper for content in center column */
     main.content-wrapper {
       grid-column: 2;
       display: flex;
@@ -67,13 +43,11 @@
       gap: 2rem;
       z-index: 10;
     }
-
-    /* ===== Header ===== */
     header.header {
       grid-column: 2;
       text-align: center;
       margin-bottom: 1rem;
-      z-index: 10;
+      user-select: none;
     }
     header h1 {
       font-size: clamp(2rem, 4vw, 3.5rem);
@@ -82,7 +56,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.25rem;
-      user-select: none;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       text-shadow: 0 0 6px var(--primary);
@@ -93,45 +66,27 @@
       font-style: italic;
       letter-spacing: 0.02em;
     }
-
-    /* ===== Tools Grid ===== */
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 1.75rem 2rem;
       align-items: start;
     }
-
-    /* ===== Tool Cards ===== */
     .tool-card {
-      background: var(--glass);
-      border-radius: var(--radius-lg);
+      background: rgba(16, 23, 42, 0.35);
+      border-radius: var(--radius);
       padding: 1.75rem 2rem;
       box-shadow: var(--shadow-lg);
       backdrop-filter: blur(20px);
-      transition: box-shadow var(--transition);
       border: 1px solid transparent;
       position: relative;
       overflow: hidden;
       cursor: default;
       display: flex;
       flex-direction: column;
-      min-height: 230px;
+      min-height: 280px;
       pointer-events: auto;
-    }
-    .tool-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(60deg, var(--primary), var(--secondary), var(--accent));
-      opacity: 0.15;
-      filter: blur(20px);
-      z-index: 0;
-      transition: opacity 0.4s ease;
-    }
-    .tool-card:hover::before {
-      opacity: 0.35;
+      transition: box-shadow var(--transition);
     }
     .tool-card:hover {
       box-shadow: var(--shadow-lg), 0 0 30px var(--primary);
@@ -141,13 +96,10 @@
       font-size: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
       color: var(--primary);
       margin-bottom: 1rem;
-      position: relative;
-      z-index: 1;
       user-select: none;
       text-shadow: 0 0 5px var(--primary);
     }
-
-    input.input, select.input, textarea.input, input[type="text"], input[type="number"], input[type="password"], textarea {
+    input.input, select.input, textarea.input {
       width: 100%;
       background: var(--surface);
       color: var(--text);
@@ -156,26 +108,18 @@
       border-radius: var(--radius);
       font-size: 1rem;
       outline: none;
-      transition: border-color var(--transition), box-shadow var(--transition);
       margin-bottom: 1rem;
       font-family: 'Poppins', sans-serif;
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-      flex-shrink: 0;
       pointer-events: auto;
+      resize: vertical;
     }
-    input.input:focus, select.input:focus, textarea.input:focus, input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus, textarea:focus {
+    input.input:focus, select.input:focus, textarea.input:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 6px rgba(56,189,248,0.3);
       background: var(--surface);
     }
-    textarea.input, textarea {
-      resize: vertical;
-      min-height: 6rem;
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-
-    button.button, button {
+    button.button {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
@@ -187,40 +131,20 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 1rem;
-      box-shadow: var(--shadow);
-      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: var(--shadow-lg);
       user-select: none;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
       justify-content: center;
       margin-top: auto;
       pointer-events: auto;
+      transition: transform var(--transition), box-shadow var(--transition);
     }
-    button.button::after, button::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
-      background-size: 20px 20px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-      border-radius: var(--radius);
-      z-index: 2;
-    }
-    button.button:hover::after, button:hover::after {
-      opacity: 1;
-    }
-    button.button:hover, button:hover {
+    button.button:hover {
       transform: translateY(-2px) scale(1.02);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 0 20px var(--primary);
     }
-    button.button:active, button:active {
+    button.button:active {
       transform: translateY(0) scale(0.98);
     }
-
-    /* Inputs side by side for random number */
     #min, #max {
       width: calc(50% - 0.5rem);
       display: inline-block;
@@ -229,15 +153,15 @@
     #max {
       margin-left: 1rem;
     }
-
-    /* Result text styling */
-    .result-text {
+    .result-text, .clock-text, .tool-output {
       margin-top: 0.5rem;
       font-weight: 600;
       color: var(--accent);
       min-height: 1.4em;
       user-select: text;
       pointer-events: auto;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
     }
     .clock-text {
       font-weight: 600;
@@ -246,8 +170,6 @@
       user-select: none;
       pointer-events: auto;
     }
-
-    /* Footer */
     footer.footer {
       grid-column: 2;
       margin-top: 3rem;
@@ -264,8 +186,6 @@
     footer.footer p {
       margin-bottom: 0.5rem;
     }
-
-    /* Spiderweb canvas */
     #spiderweb {
       position: fixed;
       inset: 0;
@@ -275,10 +195,8 @@
       background: var(--bg-color);
       cursor: crosshair;
       user-select: none;
-      pointer-events: none; /* Important to allow interaction with inputs */
+      pointer-events: none;
     }
-
-    /* Responsive */
     @media (max-width: 768px) {
       #min, #max {
         width: 100%;
@@ -292,6 +210,31 @@
         grid-template-columns: 1fr !important;
       }
     }
+    /* Markdown Preview Styling */
+    #markdownPreview {
+      background: var(--surface);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-y: auto;
+      max-height: 150px;
+      border: 1.5px solid rgba(127,127,127,0.25);
+    }
+    /* Password meter */
+    #passwordStrength {
+      margin-top: 0.3em;
+      font-weight: 700;
+    }
+    /* Color picker preview */
+    #colorPreview {
+      width: 100%;
+      height: 50px;
+      border-radius: var(--radius);
+      border: 1.5px solid rgba(127,127,127,0.25);
+      margin-top: 0.5rem;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
@@ -299,11 +242,12 @@
 
   <header class="header">
     <h1>Welcome To Learning Hub</h1>
-    <p class="tagline">This is version 1.4, so I'm still working out some bugs.</p>
+    <p class="tagline">This is version 1.4 with new tools added!</p>
   </header>
 
   <main class="content-wrapper">
     <div class="tools-grid">
+
       <!-- Calculator -->
       <section class="tool-card" aria-label="Calculator tool">
         <h2>🧮 Calculator</h2>
@@ -352,13 +296,65 @@
       <section class="tool-card" aria-label="Secret code input">
         <h2>🕵️ Secret Code</h2>
         <input class="input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
-        <div id="secretOutput" style="margin-top: 10px;" aria-live="polite"></div>
+        <div id="secretOutput" class="tool-output" aria-live="polite"></div>
       </section>
+
+      <!-- Markdown Preview -->
+      <section class="tool-card" aria-label="Markdown preview tool">
+        <h2>📝 Markdown Preview</h2>
+        <textarea class="input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
+        <div id="markdownPreview" aria-live="polite"></div>
+      </section>
+
+      <!-- Timezone Converter -->
+      <section class="tool-card" aria-label="Timezone converter">
+        <h2>🌍 Timezone Converter</h2>
+        <input class="input" type="datetime-local" id="datetimeInput" aria-label="Date and time input" />
+        <select class="input" id="tzFrom" aria-label="From timezone">
+          <option value="UTC">UTC</option>
+          <option value="America/New_York">New York (EST)</option>
+          <option value="Europe/London">London (GMT)</option>
+          <option value="Asia/Tokyo">Tokyo (JST)</option>
+          <option value="Australia/Sydney">Sydney (AEST)</option>
+        </select>
+        <select class="input" id="tzTo" aria-label="To timezone">
+          <option value="UTC">UTC</option>
+          <option value="America/New_York">New York (EST)</option>
+          <option value="Europe/London">London (GMT)</option>
+          <option value="Asia/Tokyo">Tokyo (JST)</option>
+          <option value="Australia/Sydney">Sydney (AEST)</option>
+        </select>
+        <button class="button" onclick="convertTimezone()">Convert</button>
+        <div id="tzResult" class="result-text" aria-live="polite"></div>
+      </section>
+
+      <!-- Password Strength Checker -->
+      <section class="tool-card" aria-label="Password strength checker">
+        <h2>🔐 Password Strength Checker</h2>
+        <input class="input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
+        <div id="passwordStrength" class="result-text" aria-live="polite"></div>
+      </section>
+
+      <!-- Color Picker -->
+      <section class="tool-card" aria-label="Color picker tool">
+        <h2>🎨 Color Picker</h2>
+        <input class="input" type="color" id="colorInput" aria-label="Color input" />
+        <div id="colorPreview"></div>
+      </section>
+
+      <!-- Lorem Ipsum Generator -->
+      <section class="tool-card" aria-label="Lorem Ipsum generator">
+        <h2>📜 Lorem Ipsum Generator</h2>
+        <input class="input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
+        <button class="button" onclick="generateLorem()">Generate</button>
+        <div id="loremOutput" class="tool-output" aria-live="polite"></div>
+      </section>
+
     </div>
   </main>
 
   <footer class="footer">
-    <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
+    <p>Special thanks to: Judah, Fisher, GitHub, Copilot, and Cloudflare.</p>
     <p>by John McCombs</p>
   </footer>
 
@@ -367,6 +363,7 @@
     function calculate() {
       const expr = document.getElementById("expression").value;
       try {
+        // eslint-disable-next-line no-new-func
         const result = Function('"use strict";return (' + expr + ')')();
         document.getElementById("result").innerText = "Result: " + result;
       } catch {
@@ -388,6 +385,10 @@
       localStorage.setItem("userNotes", notes);
       alert("Notes saved!");
     }
+    window.addEventListener("load", () => {
+      const notes = localStorage.getItem("userNotes");
+      if (notes) document.getElementById("notes").value = notes;
+    });
 
     // Random number generator
     function generateRandom() {
@@ -421,7 +422,7 @@
       document.getElementById("unitResult").innerText = result;
     }
 
-    // Secret code input event
+    // Secret code input event and keyboard shortcuts for secret portals
     document.getElementById("secretInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         const input = this.value.trim().toLowerCase();
@@ -438,7 +439,6 @@
       }
     });
 
-    // Keyboard shortcuts with access codes and tab openings
     document.addEventListener("keydown", function (e) {
       if (!e.shiftKey) return;
       const key = e.key.toLowerCase();
@@ -701,13 +701,132 @@
       }
     });
 
-    // Restore notes from localStorage on load
-    window.addEventListener("load", () => {
-      const notes = localStorage.getItem("userNotes");
-      if (notes) document.getElementById("notes").value = notes;
+    // Markdown Preview (simple converter)
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, function(m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+      });
+    }
+    function markdownToHtml(md) {
+      // Basic replacements for headings, bold, italics, code, links, lists
+      let html = escapeHtml(md);
+
+      // code blocks ```
+      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+
+      // inline code `code`
+      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+
+      // headings # h1 to h6
+      html = html.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
+      html = html.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
+      html = html.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
+      html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+      html = html.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+      html = html.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+
+      // bold **text**
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+      // italics *text*
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+      // unordered lists
+      html = html.replace(/^\s*[-*+] (.*)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>');
+
+      // links [text](url)
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+      // line breaks
+      html = html.replace(/\n/g, '<br />');
+
+      return html;
+    }
+    document.getElementById("markdownInput").addEventListener("input", () => {
+      const md = document.getElementById("markdownInput").value;
+      const html = markdownToHtml(md);
+      document.getElementById("markdownPreview").innerHTML = html;
     });
 
-    // Spiderweb interactive complex canvas
+    // Timezone Converter
+    function convertTimezone() {
+      const datetimeStr = document.getElementById("datetimeInput").value;
+      const tzFrom = document.getElementById("tzFrom").value;
+      const tzTo = document.getElementById("tzTo").value;
+      if (!datetimeStr) {
+        document.getElementById("tzResult").innerText = "Please select a date and time.";
+        return;
+      }
+      try {
+        const date = new Date(datetimeStr + "Z"); // Treat input as UTC
+        // Use Intl API to convert:
+        const optionsFrom = { timeZone: tzFrom, timeZoneName: "short", hour12: false };
+        const optionsTo = { timeZone: tzTo, timeZoneName: "short", hour12: false };
+        const formatterFrom = new Intl.DateTimeFormat([], optionsFrom);
+        const formatterTo = new Intl.DateTimeFormat([], optionsTo);
+        const fromStr = formatterFrom.format(date);
+        const toStr = formatterTo.format(date);
+        document.getElementById("tzResult").innerText = `${fromStr} → ${toStr}`;
+      } catch {
+        document.getElementById("tzResult").innerText = "Error converting timezone.";
+      }
+    }
+
+    // Password strength checker
+    const strengthMessages = ["Very Weak", "Weak", "Moderate", "Strong", "Very Strong"];
+    function checkPasswordStrength(pw) {
+      let score = 0;
+      if (pw.length >= 8) score++;
+      if (/[a-z]/.test(pw)) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/\d/.test(pw)) score++;
+      if (/[\W_]/.test(pw)) score++;
+      return score;
+    }
+    document.getElementById("passwordInput").addEventListener("input", function() {
+      const val = this.value;
+      if (!val) {
+        document.getElementById("passwordStrength").innerText = "";
+        return;
+      }
+      const score = checkPasswordStrength(val);
+      document.getElementById("passwordStrength").innerText = `Strength: ${strengthMessages[score-1] || "Very Weak"}`;
+    });
+
+    // Color picker preview
+    const colorInput = document.getElementById("colorInput");
+    const colorPreview = document.getElementById("colorPreview");
+    colorInput.value = "#38bdf8";
+    colorPreview.style.backgroundColor = colorInput.value;
+    colorInput.addEventListener("input", () => {
+      colorPreview.style.backgroundColor = colorInput.value;
+    });
+
+    // Lorem Ipsum Generator (simple paragraphs)
+    const loremSentences = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    ];
+    function generateLorem() {
+      let count = parseInt(document.getElementById("loremCount").value);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 10) count = 10;
+      let text = "";
+      for(let p = 0; p < count; p++) {
+        let para = "";
+        for(let s = 0; s < 5; s++) {
+          para += loremSentences[Math.floor(Math.random() * loremSentences.length)] + " ";
+        }
+        text += para.trim() + "\n\n";
+      }
+      document.getElementById("loremOutput").innerText = text.trim();
+    }
+
+    // Spiderweb interactive complex canvas (non-interactive pointer-events)
     const canvas = document.getElementById('spiderweb');
     const ctx = canvas.getContext('2d');
     let width, height;
