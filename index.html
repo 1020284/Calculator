@@ -48,6 +48,8 @@
       text-align: center;
       margin-bottom: 1rem;
       user-select: none;
+      position: relative;
+      z-index: 10;
     }
     header h1 {
       font-size: clamp(2rem, 4vw, 3.5rem);
@@ -65,6 +67,7 @@
       font-weight: 500;
       font-style: italic;
       letter-spacing: 0.02em;
+      user-select: none;
     }
     .tools-grid {
       display: grid;
@@ -235,6 +238,53 @@
       margin-top: 0.5rem;
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
     }
+    /* Glaze overlay for John McCombs */
+    #glaze {
+      position: fixed;
+      inset: 0;
+      background: rgba(56, 189, 248, 0.15);
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: screen;
+      animation: glazePulse 3s ease-in-out infinite;
+    }
+    @keyframes glazePulse {
+      0%, 100% { background-color: rgba(56, 189, 248, 0.15); }
+      50% { background-color: rgba(56, 189, 248, 0.35); }
+    }
+    #glazeText {
+      position: fixed;
+      top: 20vh;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--primary);
+      font-size: clamp(2rem, 6vw, 5rem);
+      font-weight: 900;
+      text-shadow: 0 0 20px var(--primary);
+      user-select: none;
+      pointer-events: none;
+      z-index: 10000;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 0.1em;
+    }
+    #glazeSubText {
+      position: fixed;
+      top: calc(20vh + 5rem);
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--accent);
+      font-size: clamp(1rem, 3vw, 2rem);
+      font-weight: 700;
+      text-shadow: 0 0 10px var(--accent);
+      user-select: none;
+      pointer-events: none;
+      z-index: 10000;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 0.05em;
+      max-width: 90vw;
+    }
   </style>
 </head>
 <body>
@@ -357,6 +407,17 @@
     <p>Special thanks to: Judah, Fisher, GitHub, Copilot, and Cloudflare.</p>
     <p>by John McCombs</p>
   </footer>
+
+  <!-- Glaze overlay and praise text for John McCombs -->
+  <div id="glaze"></div>
+  <div id="glazeText">John McCombs</div>
+  <div id="glazeSubText">
+    John is A Legend.<br/>
+    John Makes Unblocked Games for the People of CV.<br/>
+    John has all A's.<br/>
+    John Is unparalleled with his Collection of over 6000 games. <br/>
+    
+  </div>
 
   <script>
     // Calculator
@@ -629,7 +690,7 @@
             <!DOCTYPE html>
             <html>
             <head>
-              <title>NettleWeb</title>
+              <title>Nothing To See Here...</title>
               <style>
                 body { margin: 0; overflow: hidden; background: black; }
                 iframe { width: 100vw; height: 100vh; border: none; }
