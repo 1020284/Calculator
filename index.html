@@ -527,69 +527,78 @@
   <!-- Bounce toggle button -->
   <button id="bounceToggle" aria-pressed="false" aria-label="Toggle bounce animation" title="Toggle bounce animation" style="display:none;">🌀</button>
 
-  <!-- Intro Overlay -->
-  <div id="introOverlay" aria-live="polite" aria-atomic="true" role="alert">
-    <div id="introText"></div>
-  </div>
+<!-- Intro Overlay -->
+<div id="introOverlay" aria-live="polite" aria-atomic="true" role="alert">
+  <div id="introText"></div>
+</div>
 
-  <script>
-    // Intro sequence text & animation
-    const introOverlay = document.getElementById('introOverlay');
-    const introText = document.getElementById('introText');
-    const contentWrapper = document.querySelector('main.content-wrapper');
-    const footer = document.querySelector('footer.footer');
-    const bounceToggle = document.getElementById('bounceToggle');
-    const pageTitle = document.getElementById('pageTitle');
-    const tagline = document.querySelector('.tagline');
+<script>
+  // Intro sequence text & animation
+  const introOverlay = document.getElementById('introOverlay');
+  const introText = document.getElementById('introText');
+  const contentWrapper = document.querySelector('main.content-wrapper');
+  const footer = document.querySelector('footer.footer');
+  const bounceToggle = document.getElementById('bounceToggle');
+  const pageTitle = document.getElementById('pageTitle');
+  const tagline = document.querySelector('.tagline');
 
-    // Remove first "by John McCombs"
-    // So only show "John McCombs" and "Learning Hub"
-    const introTexts = [
-      { text: 'John McCombs', duration: 2500 },
-      { text: 'Learning Hub', duration: 3500 },
-    ];
+  // Only show "John McCombs" and "Learning Hub"
+  const introTexts = [
+    { text: 'John McCombs', duration: 2500 },
+    { text: 'Learning Hub', duration: 3500 },
+  ];
 
-    function fadeIn(element, duration = 1000) {
-      element.style.transition = `opacity ${duration}ms ease`;
-      element.style.opacity = 1;
-    }
-    function fadeOut(element, duration = 1000) {
-      element.style.transition = `opacity ${duration}ms ease`;
-      element.style.opacity = 0;
-    }
+  function fadeIn(element, duration = 1000) {
+    element.style.transition = `opacity ${duration}ms ease, transform ${duration}ms ease`;
+    element.style.opacity = 1;
+    element.style.transform = 'scale(1)';
+  }
+  function fadeOut(element, duration = 1000) {
+    element.style.transition = `opacity ${duration}ms ease`;
+    element.style.opacity = 0;
+  }
 
-    async function delay(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
+  async function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-    async function runIntro() {
-      introOverlay.style.backgroundColor = '#001a4d';
-      introText.style.opacity = 0;
-      introText.style.color = 'var(--primary)';
-      introText.style.fontWeight = '900';
-      introText.style.fontFamily = "'Orbitron', monospace";
-      introText.style.fontSize = 'clamp(6rem, 15vw, 12rem)';
-      introText.style.whiteSpace = 'nowrap';
+  async function runIntro() {
+    introOverlay.style.backgroundColor = '#001a4d';
+    introText.style.opacity = 0;
+    introText.style.color = 'var(--primary)';
+    introText.style.fontWeight = '900';
+    introText.style.fontFamily = "'Orbitron', monospace";
+    introText.style.whiteSpace = 'nowrap';
 
-      for (let i = 0; i < introTexts.length; i++) {
-        introText.textContent = introTexts[i].text;
-        fadeIn(introText, 1200);
-        await delay(introTexts[i].duration);
-        fadeOut(introText, 1200);
-        await delay(800);
+    for (let i = 0; i < introTexts.length; i++) {
+      introText.textContent = introTexts[i].text;
+
+      // Different font sizes + scaling for Learning Hub
+      if (introTexts[i].text === 'John McCombs') {
+        introText.style.fontSize = 'clamp(3rem, 8vw, 6rem)'; // smaller
+        introText.style.transform = 'scale(1)';              // no extra scaling
+      } else if (introTexts[i].text === 'Learning Hub') {
+        introText.style.fontSize = 'clamp(5rem, 18vw, 14rem)'; // bigger
+        introText.style.transform = 'scale(0.8)';              // start slightly smaller
       }
 
-      // Hide overlay and show main content
-      introOverlay.style.transition = 'opacity 1500ms ease';
-      introOverlay.style.opacity = 0;
-      await delay(1500);
-      introOverlay.style.display = 'none';
+      fadeIn(introText, 1200);
+      await delay(introTexts[i].duration);
+      fadeOut(introText, 1200);
+      await delay(800);
+    }
 
-      // Show main content and footer & bounce toggle
-      contentWrapper.style.display = 'flex';
-      footer.style.display = 'block';
-      bounceToggle.style.display = 'inline-flex';
+    // Hide overlay and show main content
+    introOverlay.style.transition = 'opacity 1500ms ease';
+    introOverlay.style.opacity = 0;
+    await delay(1500);
+    introOverlay.style.display = 'none';
 
+    // Show main content and footer & bounce toggle
+    contentWrapper.style.display = 'flex';
+    footer.style.display = 'block';
+    bounceToggle.style.display = 'inline-flex';
+ 
       // Initialize bounce effect on header texts
       toggleBounce(true);
       updateClock();
