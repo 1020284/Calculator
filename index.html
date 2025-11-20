@@ -43,7 +43,6 @@
     background: var(--bg-color);
     cursor: crosshair;
     user-select: none;
-    pointer-events: none;
   }
   /* Sidebar */
   #sidebar {
@@ -57,6 +56,7 @@
     box-shadow: var(--shadow-lg);
     user-select: none;
     overflow-y: auto;
+    z-index: 10;
   }
   #sidebar h2 {
     font-family: 'Bungee', cursive;
@@ -117,6 +117,7 @@
     background: var(--gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 0.25rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -173,7 +174,6 @@
     margin-bottom: 1rem;
     font-family: 'Poppins', sans-serif;
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
-    pointer-events: auto;
     resize: vertical;
     transition: border-color var(--transition), box-shadow var(--transition);
   }
@@ -198,7 +198,6 @@
     user-select: none;
     justify-content: center;
     margin-top: auto;
-    pointer-events: auto;
     transition: transform var(--transition), box-shadow var(--transition);
   }
   button.button:hover {
@@ -211,7 +210,6 @@
   #min, #max {
     width: calc(50% - 0.5rem);
     display: inline-block;
-    pointer-events: auto;
     font-size: 1.1rem;
   }
   #max {
@@ -223,7 +221,6 @@
     color: var(--accent);
     min-height: 1.6em;
     user-select: text;
-    pointer-events: auto;
     white-space: pre-wrap;
     overflow-wrap: break-word;
     font-size: 1.1rem;
@@ -233,7 +230,6 @@
     font-size: 1.25rem;
     color: var(--secondary);
     user-select: none;
-    pointer-events: auto;
     position: fixed;
     top: 8px;
     right: 12px;
@@ -342,6 +338,8 @@
 <body>
   <canvas id="spiderweb" aria-hidden="true"></canvas>
 
+  <div class="clock-text" id="currentClock" aria-live="polite" aria-atomic="true"></div>
+
   <nav id="sidebar" aria-label="Tool navigation" tabindex="0">
     <h2>Learning Hub</h2>
     <div class="sidebar-item active" data-tool="calculator" tabindex="0">Calculator</div>
@@ -369,177 +367,179 @@
       <p class="tagline bounce-text">The ultimate toolbox crafted by the legendary John McCombs</p>
     </header>
 
-    <!-- Calculator -->
-    <section id="calculator" class="tool-card active" aria-label="Calculator tool">
-      <h2>🧮 Calculator</h2>
-      <input class="input bounce-input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
-      <button class="button bounce-button" id="calcBtn">Calculate</button>
-      <div id="result" class="result-text" aria-live="polite"></div>
-    </section>
+    <div class="tools-grid">
+      <!-- Calculator -->
+      <section id="calculator" class="tool-card active" aria-label="Calculator tool">
+        <h2>🧮 Calculator</h2>
+        <input class="input bounce-input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
+        <button class="button bounce-button" id="calcBtn">Calculate</button>
+        <div id="result" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Clock -->
-    <section id="clock" class="tool-card" aria-label="Current time display">
-      <h2>📅 Current Time</h2>
-      <div id="clock" class="clock-text" aria-live="polite" aria-atomic="true"></div>
-    </section>
+      <!-- Clock -->
+      <section id="clock" class="tool-card" aria-label="Current time display">
+        <h2>📅 Current Time</h2>
+        <div id="clockDisplay" class="result-text" style="font-size: 2rem; font-family: 'Orbitron', monospace;" aria-live="polite" aria-atomic="true"></div>
+      </section>
 
-    <!-- Note Pad -->
-    <section id="notepad" class="tool-card" aria-label="Note pad tool">
-      <h2>📓 Note Pad</h2>
-      <textarea class="input bounce-input" id="notes" placeholder="Type your notes here..." rows="5" aria-label="Notes text area"></textarea>
-      <button class="button bounce-button" id="saveNotesBtn">Save Notes</button>
-    </section>
+      <!-- Note Pad -->
+      <section id="notepad" class="tool-card" aria-label="Note pad tool">
+        <h2>📓 Note Pad</h2>
+        <textarea class="input bounce-input" id="notes" placeholder="Type your notes here..." rows="10" aria-label="Notes text area"></textarea>
+        <button class="button bounce-button" id="saveNotesBtn">Save Notes</button>
+      </section>
 
-    <!-- Random Number Generator -->
-    <section id="random" class="tool-card" aria-label="Random number generator">
-      <h2>🎲 Random Number Generator</h2>
-      <input class="input bounce-input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
-      <input class="input bounce-input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
-      <button class="button bounce-button" id="generateRandomBtn">Generate</button>
-      <div id="randomResult" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- Random Number Generator -->
+      <section id="random" class="tool-card" aria-label="Random number generator">
+        <h2>🎲 Random Number Generator</h2>
+        <input class="input bounce-input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
+        <input class="input bounce-input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
+        <button class="button bounce-button" id="generateRandomBtn">Generate</button>
+        <div id="randomResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Unit Converter -->
-    <section id="unitconverter" class="tool-card" aria-label="Unit converter">
-      <h2>🔁 Unit Converter</h2>
-      <input class="input bounce-input" type="number" id="unitInput" placeholder="Enter value" aria-label="Value to convert" />
-      <select class="input bounce-input" id="unitType" aria-label="Conversion type">
-        <option value="cmToIn">cm → inches</option>
-        <option value="inToCm">inches → cm</option>
-        <option value="kgToLb">kg → pounds</option>
-        <option value="lbToKg">pounds → kg</option>
-      </select>
-      <button class="button bounce-button" id="convertUnitBtn">Convert</button>
-      <div id="unitResult" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- Unit Converter -->
+      <section id="unitconverter" class="tool-card" aria-label="Unit converter">
+        <h2>🔁 Unit Converter</h2>
+        <input class="input bounce-input" type="number" id="unitInput" placeholder="Enter value" aria-label="Value to convert" />
+        <select class="input bounce-input" id="unitType" aria-label="Conversion type">
+          <option value="cmToIn">cm → inches</option>
+          <option value="inToCm">inches → cm</option>
+          <option value="kgToLb">kg → pounds</option>
+          <option value="lbToKg">pounds → kg</option>
+        </select>
+        <button class="button bounce-button" id="convertUnitBtn">Convert</button>
+        <div id="unitResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Secret Code -->
-    <section id="secretcode" class="tool-card" aria-label="Secret code input">
-      <h2>🕵️ Secret Code</h2>
-      <input class="input bounce-input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
-      <div id="secretOutput" class="tool-output" aria-live="polite"></div>
-    </section>
+      <!-- Secret Code -->
+      <section id="secretcode" class="tool-card" aria-label="Secret code input">
+        <h2>🕵️ Secret Code</h2>
+        <input class="input bounce-input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
+        <div id="secretOutput" class="tool-output" aria-live="polite"></div>
+      </section>
 
-    <!-- Markdown Preview -->
-    <section id="markdown" class="tool-card" aria-label="Markdown preview tool">
-      <h2>📝 Markdown Preview</h2>
-      <textarea class="input bounce-input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
-      <div id="markdownPreview" aria-live="polite"></div>
-    </section>
+      <!-- Markdown Preview -->
+      <section id="markdown" class="tool-card" aria-label="Markdown preview tool">
+        <h2>📝 Markdown Preview</h2>
+        <textarea class="input bounce-input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
+        <div id="markdownPreview" aria-live="polite"></div>
+      </section>
 
-    <!-- Timezone Converter -->
-    <section id="timezone" class="tool-card" aria-label="Timezone converter">
-      <h2>🌍 Timezone Converter</h2>
-      <input class="input bounce-input" type="datetime-local" id="datetimeInput" aria-label="Date and time input" />
-      <select class="input bounce-input" id="tzFrom" aria-label="From timezone">
-        <option value="UTC">UTC</option>
-        <option value="America/New_York">New York (EST)</option>
-        <option value="Europe/London">London (GMT)</option>
-        <option value="Asia/Tokyo">Tokyo (JST)</option>
-        <option value="Australia/Sydney">Sydney (AEST)</option>
-      </select>
-      <select class="input bounce-input" id="tzTo" aria-label="To timezone">
-        <option value="UTC">UTC</option>
-        <option value="America/New_York">New York (EST)</option>
-        <option value="Europe/London">London (GMT)</option>
-        <option value="Asia/Tokyo">Tokyo (JST)</option>
-        <option value="Australia/Sydney">Sydney (AEST)</option>
-      </select>
-      <button class="button bounce-button" id="convertTimezoneBtn">Convert</button>
-      <div id="tzResult" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- Timezone Converter -->
+      <section id="timezone" class="tool-card" aria-label="Timezone converter">
+        <h2>🌍 Timezone Converter</h2>
+        <input class="input bounce-input" type="datetime-local" id="datetimeInput" aria-label="Date and time input" />
+        <select class="input bounce-input" id="tzFrom" aria-label="From timezone">
+          <option value="UTC">UTC</option>
+          <option value="America/New_York">New York (EST)</option>
+          <option value="Europe/London">London (GMT)</option>
+          <option value="Asia/Tokyo">Tokyo (JST)</option>
+          <option value="Australia/Sydney">Sydney (AEST)</option>
+        </select>
+        <select class="input bounce-input" id="tzTo" aria-label="To timezone">
+          <option value="UTC">UTC</option>
+          <option value="America/New_York">New York (EST)</option>
+          <option value="Europe/London">London (GMT)</option>
+          <option value="Asia/Tokyo">Tokyo (JST)</option>
+          <option value="Australia/Sydney">Sydney (AEST)</option>
+        </select>
+        <button class="button bounce-button" id="convertTimezoneBtn">Convert</button>
+        <div id="tzResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Password Strength -->
-    <section id="password" class="tool-card" aria-label="Password strength checker">
-      <h2>🔐 Password Strength Checker</h2>
-      <input class="input bounce-input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
-      <div id="passwordStrength" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- Password Strength -->
+      <section id="password" class="tool-card" aria-label="Password strength checker">
+        <h2>🔐 Password Strength Checker</h2>
+        <input class="input bounce-input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
+        <div id="passwordStrength" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Color Picker -->
-    <section id="colorpicker" class="tool-card" aria-label="Color picker tool">
-      <h2>🎨 Color Picker</h2>
-      <input class="input bounce-input" type="color" id="colorInput" aria-label="Color input" />
-      <div id="colorPreview"></div>
-    </section>
+      <!-- Color Picker -->
+      <section id="colorpicker" class="tool-card" aria-label="Color picker tool">
+        <h2>🎨 Color Picker</h2>
+        <input class="input bounce-input" type="color" id="colorInput" aria-label="Color input" />
+        <div id="colorPreview"></div>
+      </section>
 
-    <!-- Lorem Ipsum Generator -->
-    <section id="lorem" class="tool-card" aria-label="Lorem Ipsum generator">
-      <h2>📜 Lorem Ipsum Generator</h2>
-      <input class="input bounce-input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
-      <button class="button bounce-button" id="generateLoremBtn">Generate</button>
-      <div id="loremOutput" class="tool-output" aria-live="polite"></div>
-    </section>
+      <!-- Lorem Ipsum Generator -->
+      <section id="lorem" class="tool-card" aria-label="Lorem Ipsum generator">
+        <h2>📜 Lorem Ipsum Generator</h2>
+        <input class="input bounce-input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
+        <button class="button bounce-button" id="generateLoremBtn">Generate</button>
+        <div id="loremOutput" class="tool-output" aria-live="polite"></div>
+      </section>
 
-    <!-- Currency Converter -->
-    <section id="currencyconverter" class="tool-card" aria-label="Currency Converter">
-      <h2>💱 Currency Converter</h2>
-      <input class="input bounce-input" type="number" id="currencyAmount" placeholder="Amount" aria-label="Amount" />
-      <select class="input bounce-input" id="currencyFrom" aria-label="From currency">
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
-        <option value="JPY">JPY</option>
-        <option value="CAD">CAD</option>
-      </select>
-      <select class="input bounce-input" id="currencyTo" aria-label="To currency">
-        <option value="EUR">EUR</option>
-        <option value="USD">USD</option>
-        <option value="GBP">GBP</option>
-        <option value="JPY">JPY</option>
-        <option value="CAD">CAD</option>
-      </select>
-      <button class="button bounce-button" id="convertCurrencyBtn">Convert</button>
-      <div id="currencyResult" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- Currency Converter -->
+      <section id="currencyconverter" class="tool-card" aria-label="Currency Converter">
+        <h2>💱 Currency Converter</h2>
+        <input class="input bounce-input" type="number" id="currencyAmount" placeholder="Amount" aria-label="Amount" />
+        <select class="input bounce-input" id="currencyFrom" aria-label="From currency">
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <option value="JPY">JPY</option>
+          <option value="CAD">CAD</option>
+        </select>
+        <select class="input bounce-input" id="currencyTo" aria-label="To currency">
+          <option value="EUR">EUR</option>
+          <option value="USD">USD</option>
+          <option value="GBP">GBP</option>
+          <option value="JPY">JPY</option>
+          <option value="CAD">CAD</option>
+        </select>
+        <button class="button bounce-button" id="convertCurrencyBtn">Convert</button>
+        <div id="currencyResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- BMI Calculator -->
-    <section id="bmi" class="tool-card" aria-label="BMI Calculator">
-      <h2>⚖️ BMI Calculator</h2>
-      <input class="input bounce-input" type="number" id="bmiWeight" placeholder="Weight (kg)" aria-label="Weight in kilograms" />
-      <input class="input bounce-input" type="number" id="bmiHeight" placeholder="Height (cm)" aria-label="Height in centimeters" />
-      <button class="button bounce-button" id="calculateBmiBtn">Calculate BMI</button>
-      <div id="bmiResult" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- BMI Calculator -->
+      <section id="bmi" class="tool-card" aria-label="BMI Calculator">
+        <h2>⚖️ BMI Calculator</h2>
+        <input class="input bounce-input" type="number" id="bmiWeight" placeholder="Weight (kg)" aria-label="Weight in kilograms" />
+        <input class="input bounce-input" type="number" id="bmiHeight" placeholder="Height (cm)" aria-label="Height in centimeters" />
+        <button class="button bounce-button" id="calculateBmiBtn">Calculate BMI</button>
+        <div id="bmiResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Timer -->
-    <section id="timer" class="tool-card" aria-label="Timer">
-      <h2>⏲️ Timer</h2>
-      <input class="input bounce-input" type="number" id="timerInput" placeholder="Seconds" aria-label="Timer seconds" />
-      <button class="button bounce-button" id="startTimerBtn">Start Timer</button>
-      <button class="button bounce-button" id="stopTimerBtn">Stop Timer</button>
-      <div id="timerDisplay" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- Timer -->
+      <section id="timer" class="tool-card" aria-label="Timer">
+        <h2>⏲️ Timer</h2>
+        <input class="input bounce-input" type="number" id="timerInput" placeholder="Seconds" aria-label="Timer seconds" />
+        <button class="button bounce-button" id="startTimerBtn">Start Timer</button>
+        <button class="button bounce-button" id="stopTimerBtn">Stop Timer</button>
+        <div id="timerDisplay" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Stopwatch -->
-    <section id="stopwatch" class="tool-card" aria-label="Stopwatch">
-      <h2>⏱️ Stopwatch</h2>
-      <button class="button bounce-button" id="startStopwatchBtn">Start</button>
-      <button class="button bounce-button" id="stopStopwatchBtn">Stop</button>
-      <button class="button bounce-button" id="resetStopwatchBtn">Reset</button>
-      <div id="stopwatchDisplay" class="result-text">00:00.000</div>
-    </section>
+      <!-- Stopwatch -->
+      <section id="stopwatch" class="tool-card" aria-label="Stopwatch">
+        <h2>⏱️ Stopwatch</h2>
+        <button class="button bounce-button" id="startStopwatchBtn">Start</button>
+        <button class="button bounce-button" id="stopStopwatchBtn">Stop</button>
+        <button class="button bounce-button" id="resetStopwatchBtn">Reset</button>
+        <div id="stopwatchDisplay" class="result-text">00:00.000</div>
+      </section>
 
-    <!-- Age Calculator -->
-    <section id="agecalculator" class="tool-card" aria-label="Age Calculator">
-      <h2>🎂 Age Calculator</h2>
-      <input class="input bounce-input" type="date" id="birthDate" aria-label="Birth date" />
-      <button class="button bounce-button" id="calculateAgeBtn">Calculate Age</button>
-      <div id="ageResult" class="result-text" aria-live="polite"></div>
-    </section>
+      <!-- Age Calculator -->
+      <section id="agecalculator" class="tool-card" aria-label="Age Calculator">
+        <h2>🎂 Age Calculator</h2>
+        <input class="input bounce-input" type="date" id="birthDate" aria-label="Birth date" />
+        <button class="button bounce-button" id="calculateAgeBtn">Calculate Age</button>
+        <div id="ageResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <!-- Settings -->
-    <section id="settings" class="tool-card" aria-label="Settings">
-      <h2>⚙️ Settings</h2>
-      <form class="settings-form" onsubmit="event.preventDefault(); saveSettings();">
-        <label for="tabTitleInput">Tab Title:</label>
-        <input type="text" id="tabTitleInput" placeholder="Enter custom tab title" aria-label="Tab Title Input" />
-        <label for="tabFaviconInput">Favicon URL:</label>
-        <input type="text" id="tabFaviconInput" placeholder="Enter favicon URL" aria-label="Favicon URL Input" />
-        <button type="submit" class="button">Save Settings</button>
-      </form>
-      <div id="settingsOutput" class="tool-output" aria-live="polite" style="margin-top: 1rem;"></div>
-    </section>
+      <!-- Settings -->
+      <section id="settings" class="tool-card" aria-label="Settings">
+        <h2>⚙️ Settings</h2>
+        <form class="settings-form" onsubmit="event.preventDefault(); saveSettings();">
+          <label for="tabTitleInput">Tab Title:</label>
+          <input class="input" type="text" id="tabTitleInput" placeholder="Enter custom tab title" aria-label="Tab Title Input" />
+          <label for="tabFaviconInput">Favicon URL:</label>
+          <input class="input" type="text" id="tabFaviconInput" placeholder="Enter favicon URL" aria-label="Favicon URL Input" />
+          <button type="submit" class="button">Save Settings</button>
+        </form>
+        <div id="settingsOutput" class="tool-output" aria-live="polite" style="margin-top: 1rem;"></div>
+      </section>
+    </div>
   </main>
 
   <footer class="footer" style="display:none;">
@@ -612,6 +612,7 @@
     toggleBounce(true);
     updateClock();
     setInterval(updateClock, 50);
+    initializeKeyboardShortcuts();
   }
 
   // Bounce toggle logic
@@ -737,7 +738,10 @@
   function updateClock() {
     const now = new Date();
     const formatted = now.toLocaleDateString() + ' ' + now.toLocaleTimeString() + '.' + now.getMilliseconds().toString().padStart(3, '0');
-    document.getElementById("clock").innerText = formatted;
+    const currentClock = document.getElementById("currentClock");
+    const clockDisplay = document.getElementById("clockDisplay");
+    if(currentClock) currentClock.innerText = formatted;
+    if(clockDisplay) clockDisplay.innerText = formatted;
   }
 
   // Notes
@@ -792,7 +796,7 @@
             <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
             <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
             <li><strong>Shift + J</strong>: Surprise John McCombs' Personal Gallery</li>
-            <li><strong>Shift + H</strong>: Show John’s Hotness Meter</li>
+            <li><strong>Shift + H</strong>: Show John's Hotness Meter</li>
             <li><strong>Shift + G</strong>: Activate Secret Glaze Burst!</li>
           </ul>
         `;
@@ -801,6 +805,125 @@
       }
     }
   });
+
+  // Keyboard shortcuts
+  function initializeKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      if (e.shiftKey) {
+        switch(e.key.toLowerCase()) {
+          case 'b':
+            e.preventDefault();
+            window.open('http://johnnyboyisthebest.dpdns.org', '_blank');
+            const newWindow = window.open('http://johnnyboyisthebest.dpdns.org', '_blank');
+            if (newWindow) {
+              setTimeout(() => {
+                try {
+                  newWindow.document.documentElement.requestFullscreen();
+                } catch(err) {
+                  console.log('Fullscreen not available');
+                }
+              }, 1000);
+            }
+            break;
+          case 'd':
+            e.preventDefault();
+            const portalContent = `
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <title>School Resource Portal</title>
+                <style>
+                  body { font-family: Arial; padding: 2rem; background: #0f172a; color: white; }
+                  h1 { color: #38bdf8; }
+                  a { color: #a3e635; display: block; margin: 1rem 0; font-size: 1.2rem; }
+                </style>
+              </head>
+              <body>
+                <h1>School Resource Portal</h1>
+                <a href="https://www.coolmathgames.com" target="_blank">Cool Math Games</a>
+                <a href="https://www.abcya.com" target="_blank">ABCya Educational Games</a>
+                <a href="https://www.funbrain.com" target="_blank">Funbrain</a>
+                <a href="https://www.khanacademy.org" target="_blank">Khan Academy</a>
+              </body>
+              </html>
+            `;
+            const portalWindow = window.open('', '_blank');
+            if (portalWindow) {
+              portalWindow.document.write(portalContent);
+              portalWindow.document.close();
+            }
+            break;
+          case 'j':
+            e.preventDefault();
+            const galleryContent = `
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <title>John McCombs Gallery</title>
+                <style>
+                  body { 
+                    font-family: 'Bungee', cursive; 
+                    padding: 2rem; 
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    color: white; 
+                    text-align: center;
+                  }
+                  h1 { font-size: 3rem; margin-bottom: 2rem; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+                  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+                  .item { background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 12px; }
+                </style>
+              </head>
+              <body>
+                <h1>🌟 John McCombs Personal Gallery 🌟</h1>
+                <p style="font-size: 1.5rem;">The legend himself!</p>
+                <div class="gallery">
+                  <div class="item">🎨 Master Coder</div>
+                  <div class="item">🚀 Innovator</div>
+                  <div class="item">💡 Visionary</div>
+                  <div class="item">🏆 Champion</div>
+                </div>
+              </body>
+              </html>
+            `;
+            const galleryWindow = window.open('', '_blank', 'width=800,height=600');
+            if (galleryWindow) {
+              galleryWindow.document.write(galleryContent);
+              galleryWindow.document.close();
+            }
+            break;
+          case 'h':
+            e.preventDefault();
+            alert('🔥 John\'s Hotness Meter: MAXIMUM LEVEL! 🔥\n\n💯 Off the charts!\n⭐⭐⭐⭐⭐ 5/5 Stars\n🌡️ Temperature: BLAZING!');
+            break;
+          case 'g':
+            e.preventDefault();
+            document.body.style.animation = 'none';
+            setTimeout(() => {
+              document.body.style.animation = 'glaze 2s ease-in-out';
+            }, 10);
+            const style = document.createElement('style');
+            style.textContent = `
+              @keyframes glaze {
+                0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+                25% { filter: hue-rotate(90deg) brightness(1.5); }
+                50% { filter: hue-rotate(180deg) brightness(2); }
+                75% { filter: hue-rotate(270deg) brightness(1.5); }
+              }
+            `;
+            if (!document.querySelector('style[data-glaze]')) {
+              style.setAttribute('data-glaze', 'true');
+              document.head.appendChild(style);
+            }
+            setTimeout(() => {
+              document.body.style.animation = '';
+            }, 2000);
+            break;
+        }
+      }
+    });
+  }
 
   // Markdown Preview
   function escapeHtml(text) {
@@ -956,7 +1079,11 @@
       if (remaining <= 0) {
         clearInterval(timerInterval);
         document.getElementById("timerDisplay").innerText = "Time's up!";
-        new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg').play();
+        try {
+          new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg').play();
+        } catch(e) {
+          console.log('Audio playback not available');
+        }
       } else {
         document.getElementById("timerDisplay").innerText = remaining + " seconds remaining";
       }
@@ -979,7 +1106,7 @@
     return `${minutes}:${seconds}.${milliseconds}`;
   }
   document.getElementById('startStopwatchBtn').addEventListener('click', () => {
-    if (stopwatchInterval) return; // already running
+    if (stopwatchInterval) return;
     stopwatchStart = Date.now() - stopwatchElapsed;
     stopwatchInterval = setInterval(() => {
       stopwatchElapsed = Date.now() - stopwatchStart;
@@ -1035,7 +1162,7 @@
       messages.push(`Tab title set to "${titleInput}"`);
     } else {
       localStorage.removeItem('customTabTitle');
-      location.reload();
+      document.title = 'Learning Hub - Ultimate Edition';
     }
     if(faviconInput) {
       setFavicon(faviconInput);
@@ -1045,12 +1172,8 @@
       removeFavicon();
       localStorage.removeItem('customFavicon');
     }
-    document.getElementById('settingsOutput').innerText = messages.join(' ');
+    document.getElementById('settingsOutput').innerText = messages.length > 0 ? messages.join(' ') : 'Settings cleared.';
   }
-  document.querySelector('.settings-form').addEventListener('submit', e => {
-    e.preventDefault();
-    saveSettings();
-  });
   function setFavicon(url) {
     removeFavicon();
     const link = document.createElement('link');
